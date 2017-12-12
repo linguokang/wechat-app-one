@@ -1,0 +1,107 @@
+<style lang="less">
+
+.container{
+  padding: 20rpx;
+  .title{
+    font-weight: bold;
+    font-size: 40rpx;
+    margin-bottom: 50rpx;
+  }
+  .asker,.answerer{
+    font-size:24rpx;
+    color:#666;
+    line-height:3;
+  }
+  .question{
+    font-size:28rpx;
+    color:#666;
+    line-height:1.8;
+    margin-bottom: 30rpx;
+    padding-bottom: 30rpx;
+    border-bottom: 3rpx solid #d7d7d7;
+  }
+  .edit{
+    font-size: 24rpx;
+    color: #747474;
+    margin-bottom: 30rpx;
+  }
+
+}
+</style>
+<style>
+  @import "../components/wxParse/wxParse.wxss";
+</style>
+<template>
+  <view class="container">
+
+    <text class="title">{{datas.question_title}}</text>
+    <text class="asker">{{datas.asker.user_name}}问：</text>
+    <text class="question">{{datas.question_content}}</text>
+    <text class="answerer">{{datas.answerer.user_name}}答：</text>
+    <import src="../components/wxParse/wxParse.wxml"/>
+    <view class='wxParse'>
+      <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+    </view>
+    <text class="edit">{{datas.charge_edt}}</text>
+
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  import WxParse from '../components/wxParse/wxParse.js'
+
+  import api from '../api/api.js'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '问答'
+    }
+    components = {
+
+    }
+
+//    mixins = [testMixin]
+
+    data = {
+      datas: [],
+    }
+    methods = {
+
+    };
+    getHtml(){
+      var article = this.datas.answer_content;
+      /**
+       * WxParse.wxParse(bindName , type, data, target,imagePadding)
+       * 1.bindName绑定的数据名(必填)
+       * 2.type可以为html或者md(必填)
+       * 3.data为传入的具体数据(必填)
+       * 4.target为Page对象,一般为this(必填)
+       * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+       */
+      var that = this;
+      WxParse.wxParse('article', 'html', article, that, 5);
+    }
+
+    onLoad(option) {
+      console.log(option.id)
+      api.getQuestionById({
+          query: {
+            id: option.id
+          },
+          success: (res) => {
+
+          this.datas = res.data.data
+          this.getHtml()
+          this.$apply();
+          console.log(this.datas)
+
+          }
+      })
+    }
+
+
+  }
+</script>

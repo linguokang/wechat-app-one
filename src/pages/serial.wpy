@@ -1,0 +1,169 @@
+<style lang="less">
+
+.container{
+  padding: 20rpx;
+  .title{
+    font-weight: bold;
+    font-size: 40rpx;
+    margin-bottom: 50rpx;
+  }
+  .author{
+    font-size: 24rpx;
+    color: #4e4e4e;
+    margin-bottom: 50rpx;
+  }
+  .article{
+    font-size: 28rpx;
+  }
+  .edit{
+    font-size: 24rpx;
+    color: #4e4e4e;
+    margin-bottom: 30rpx;
+  }
+  .author_box{
+    font-size: 24rpx;
+    .tap{
+      display: block;
+      width: 150rpx;
+      border-bottom:8rpx solid #000;
+      margin-bottom: 20rpx;
+      line-height: 2;
+      font-size: 28rpx;
+    }
+    .box1{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      image{
+        width: 80rpx;
+        height: 80rpx;
+        margin-right: 20rpx;
+        border-radius: 50%;
+      }
+      .box2{
+        display: flex;
+        flex-direction: column;
+        .user_name{
+          display: block;
+          line-height: 32rpx;
+        }
+        .desc{
+          display: block;
+          line-height: 32rpx;
+        }
+      }
+    }
+  }
+  .skip{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20rpx 0;
+    .last,.next{
+      font-size: 28rpx;
+    }
+    .disable{
+      color: #7d7d7d;
+      font-size: 28rpx;
+    }
+  }
+}
+</style>
+<style>
+  @import "../components/wxParse/wxParse.wxss";
+</style>
+<template>
+  <view class="container">
+    <text class="title">{{datas.title}}</text>
+    <text class="author">文/{{datas.author.user_name}}</text>
+    <!--<view class="article" is="wxParse" data="{{wxParseData:article}}"></view>-->
+    <import src="../components/wxParse/wxParse.wxml"/>
+    <view class='wxParse'>
+      <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+    </view>
+    <text class="edit">{{datas.charge_edt}}</text>
+    <!--前一章 后一章-->
+    <view class='skip'>
+      <text class="last" bindtap='golast'>前一章</text>
+      <text class="next" wx:if="{{datas.nextid}}" bindtap='gonext'>后一章</text>
+      <text class="disable" wx:if="{{!datas.nextid}}">后一章：即将更新</text>
+    </view>
+    <view class='author_box'>
+      <text class="tap">作者</text>
+      <view class='box1'>
+        <image class="img" src="{{datas.author.web_url}}" mode="aspectFill"/>
+        <view class='box2'>
+          <text class="user_name">{{datas.author.user_name}}{{datas.author.wb_name}}</text>
+          <text class="desc">{{datas.author.summary}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  import WxParse from '../components/wxParse/wxParse.js'
+
+  import api from '../api/api.js'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '连载'
+    }
+    components = {
+
+    }
+
+//    mixins = [testMixin]
+
+    data = {
+      datas: [],
+    }
+    methods = {
+      golast(){
+        wx.redirectTo({
+          url: 'serial?id='+this.datas.lastid
+        })
+      },
+      gonext(){
+        wx.redirectTo({
+          url: 'serial?id='+this.datas.nextid
+        })
+      }
+    };
+    getHtml(){
+      var article = this.datas.content;
+      /**
+       * WxParse.wxParse(bindName , type, data, target,imagePadding)
+       * 1.bindName绑定的数据名(必填)
+       * 2.type可以为html或者md(必填)
+       * 3.data为传入的具体数据(必填)
+       * 4.target为Page对象,一般为this(必填)
+       * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+       */
+      var that = this;
+      WxParse.wxParse('article', 'html', article, that, 5);
+    }
+
+    onLoad(option) {
+      console.log(option.id)
+      api.getSerialById({
+          query: {
+            id: option.id
+          },
+          success: (res) => {
+
+          this.datas = res.data.data
+          this.getHtml()
+          this.$apply();
+          console.log(this.datas)
+
+          }
+      })
+    }
+
+
+  }
+</script>

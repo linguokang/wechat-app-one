@@ -1,0 +1,158 @@
+<style lang="less">
+
+.container{
+  padding: 20rpx;
+  .title{
+    font-weight: bold;
+    font-size: 40rpx;
+    margin-bottom: 50rpx;
+  }
+  .author{
+    font-size: 24rpx;
+    color: #4e4e4e;
+    margin-bottom: 50rpx;
+  }
+  .article{
+    font-size: 28rpx;
+  }
+  .edit{
+    font-size: 24rpx;
+    color: #4e4e4e;
+    margin-bottom: 30rpx;
+  }
+  .author_box{
+    font-size: 24rpx;
+    .tap{
+      display: block;
+      width: 150rpx;
+      border-bottom:8rpx solid #000;
+      margin-bottom: 20rpx;
+      line-height: 2;
+      font-size: 28rpx;
+    }
+    .box1{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      image{
+        width: 80rpx;
+        height: 80rpx;
+        margin-right: 20rpx;
+        border-radius: 50%;
+      }
+      .box2{
+        display: flex;
+        flex-direction: column;
+        .user_name{
+          display: block;
+          line-height: 32rpx;
+        }
+        .desc{
+          display: block;
+          line-height: 32rpx;
+        }
+      }
+    }
+  }
+}
+</style>
+<style>
+  @import "../components/wxParse/wxParse.wxss";
+</style>
+<template>
+  <view class="container">
+    <!--<text class="title">鸟鞝</text>-->
+    <!--<text class="author">文/老王子</text>-->
+    <!--<text class="article">greghh</text>-->
+    <!--<text class="edit">责任编辑：金子棋 jinziqi@wufazhuce.com</text>-->
+
+    <!--<view class='author_box'>-->
+      <!--<text class="tap">作者</text>-->
+      <!--<view class='box1'>-->
+        <!--<image class="img" src="../assets/img/all.png" mode="aspectFill"/>-->
+        <!--<view class='box2'>-->
+          <!--<text class="user_name">老王子 @新老王子</text>-->
+          <!--<text class="desc">作家，广告人。@新老王子</text>-->
+        <!--</view>-->
+      <!--</view>-->
+    <!--</view>-->
+
+    <text class="title">{{datas.hp_title}}</text>
+    <text class="author">文/{{datas.hp_author}}</text>
+    <!--<view class="article" is="wxParse" data="{{wxParseData:article}}"></view>-->
+    <import src="../components/wxParse/wxParse.wxml"/>
+    <view class='wxParse'>
+      <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
+    </view>
+    <text class="edit">{{datas.hp_author_introduce}}</text>
+
+    <view class='author_box'>
+      <text class="tap">作者</text>
+      <view class='box1'>
+        <image class="img" src="{{datas.author[0].web_url}}" mode="aspectFill"/>
+        <view class='box2'>
+          <text class="user_name">{{datas.author[0].user_name}}{{datas.author[0].wb_name}}</text>
+          <text class="desc">{{datas.author[0].summary}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+
+  import WxParse from '../components/wxParse/wxParse.js'
+
+  import api from '../api/api.js'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '阅读'
+    }
+    components = {
+
+    }
+
+//    mixins = [testMixin]
+
+    data = {
+      datas: [],
+    }
+    methods = {
+
+    };
+    getHtml(){
+      var article = this.datas.hp_content;
+      /**
+       * WxParse.wxParse(bindName , type, data, target,imagePadding)
+       * 1.bindName绑定的数据名(必填)
+       * 2.type可以为html或者md(必填)
+       * 3.data为传入的具体数据(必填)
+       * 4.target为Page对象,一般为this(必填)
+       * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+       */
+      var that = this;
+      WxParse.wxParse('article', 'html', article, that, 5);
+    }
+
+    onLoad(option) {
+      console.log(option.id)
+      api.getEssayById({
+          query: {
+            id: option.id
+          },
+          success: (res) => {
+
+          this.datas = res.data.data
+        this.getHtml()
+          this.$apply();
+          console.log(this.datas)
+
+          }
+      })
+    }
+
+
+  }
+</script>
