@@ -114,8 +114,6 @@
 
     }
 
-//    mixins = [testMixin]
-
     data = {
       datas: [],
     }

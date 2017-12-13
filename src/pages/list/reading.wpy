@@ -1,0 +1,111 @@
+<style lang="less">
+  .container{
+    padding-top: 50rpx;
+  }
+  .month_box{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    .title{
+      display: flex;
+      justify-content: center;
+      border-bottom: 1rpx solid #a0a0a0;
+    }
+  }
+  .section{
+    position: fixed;
+    background: #fff;
+    border-bottom: 1rpx solid #c0c0c0;
+    width: 750rpx;
+    .picker{
+      display: flex;
+      justify-content: center;
+      flex-direction: row;
+      align-items: center;
+      color: #707070;
+      .dropdown{
+        width: 30rpx;
+        height: 30rpx;
+      }
+    }
+  }
+
+</style>
+
+<template>
+  <view>
+  <view class="section">
+    <picker mode="date" value="{{date}}" start="2012-10-01" end="2017-09-01" bindchange="bindDateChange">
+      <view class="picker">
+        <text>{{date}}</text>
+        <image class="dropdown" src="../../assets/img/dropdown.png" mode="aspectFill"/>
+      </view>
+    </picker>
+  </view>
+  <view class="container">
+    <view class='month_box'>
+      <view class='' wx:for="{{readList}}">
+        <text class='title'>{{item[0].month}}月</text>
+        <repeat for="{{item}}" key="index" index="index" item="item">
+          <listitem :listData="item"></listitem>
+        </repeat>
+      </view>
+    </view>
+  </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '../../api/api.js'
+  import listitem from '../../components/listitem'
+  var moment = require('moment');
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '阅读'
+    }
+    components = {
+      listitem:listitem
+    }
+
+    data = {
+      readList: [],
+      date:'',
+    }
+    methods = {
+      bindDateChange: function(e) {
+        this.date = e.detail.value
+        this.readList = []
+        this.getNextMonth(this.date)
+        this.$apply()
+      },
+    };
+    getNextMonth(date){
+      api.getArticlesByMonth({
+        query: {
+          type:'essay',
+          month: date
+        },
+        success: (res) => {
+            res.data.data.map((value)=>{
+            value.hp_makettime = new Date(value.hp_makettime).Format("yyyy/MM/dd")
+            value.month = new Date(value.hp_makettime).Format("MM")
+            })
+            this.readList.push(res.data.data)
+            this.$apply()
+        }
+      })
+    }
+    onLoad(option) {
+      this.month = moment().format('MM')
+      this.date = moment().format('YYYY-MM-DD')
+      this.getNextMonth(this.date)
+    }
+    onReachBottom(){
+      this.date = moment(this.date).subtract(1, 'months').format('YYYY-MM-DD')
+      this.getNextMonth(this.date)
+    }
+
+  }
+</script>

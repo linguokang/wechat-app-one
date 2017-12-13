@@ -113,13 +113,6 @@
 
 <script>
   import wepy from 'wepy'
-  import List from '../components/list'
-  import Panel from '@/components/panel' // alias example
-  import Counter from 'counter' // alias example
-  import Group from '../components/group'
-  import Toast from 'wepy-com-toast'
-  import testMixin from '../mixins/test'
-
   import api from '../api/api.js'
   import util from '../utils/utils.js'
   export default class Index extends wepy.page {
@@ -127,15 +120,7 @@
       navigationBarTitleText: '首页'
     }
     components = {
-      panel: Panel,
-      counter1: Counter,
-      counter2: Counter,
-      list: List,
-      group: Group,
-      toast: Toast
     }
-
-    mixins = [testMixin]
 
     data = {
       VolIdList:[],
@@ -145,7 +130,6 @@
     }
     methods = {
       toDetail(category,id){
-//        console.log(category)
         var url
         switch(category)
         {
@@ -178,7 +162,6 @@
           this.getVols(this.VolIdList)
         }
         this.date = this.vols[e.detail.current].date
-//        console.log(this.vols[e.detail.current].date)
         this.$apply();
       }
     };
@@ -196,14 +179,12 @@
                 this.getVols(idList)
               }else{
                 this.$apply();
-//                console.log(888)
+
               }
             }
         })
       }else{
-//        this.date = this.vols[0].date
         this.$apply();
-//        console.log(999)
       }
     }
     onShow(){
@@ -211,16 +192,15 @@
     }
     onLoad() {
       this.date = this.date.Format("yyyy/MM/dd");
-//      this.toDetail('1','2958')
-//      api.getVolIdList({
-//          success: (res) => {
-//          if (res.data.res === 0) {
-//          this.VolIdList = res.data.data
-//          this.getVols(this.VolIdList)
-//            console.log(this.VolIdList)
-//          }
-//        }
-//      })
+      api.getVolIdList({
+          success: (res) => {
+          if (res.data.res === 0) {
+          this.VolIdList = res.data.data
+          this.getVols(this.VolIdList)
+            console.log(this.VolIdList)
+          }
+        }
+      })
 
     }
   }

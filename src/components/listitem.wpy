@@ -1,0 +1,69 @@
+<style type="less">
+  .list {
+    width: 750rpx;
+    padding: 10rpx 20rpx;
+    border-bottom: 1rpx solid #d8d8d8;
+    box-sizing: border-box;
+    navigator{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      image{
+        width: 100rpx;
+        height: 100rpx;
+      }
+      .right{
+        display: flex;
+        flex-direction: column;
+        color: #6e6e6e;
+        margin-left: 10rpx;
+        max-width: 600rpx;
+        .hp_title{
+          font-size: 28rpx;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .user_name{
+          font-size: 24rpx;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+</style>
+<template>
+    <view class='list'>
+        <navigator url="/pages/read?id={{listData.content_id}}" hover-class="navigator-hover">
+          <image class="img" src="{{ listData.author[0].web_url }}" mode="aspectFill"/>
+          <view class='right'>
+            <text class='hp_title'>{{listData.hp_title}}</text>
+            <text class='user_name'>文/{{listData.author[0].user_name}}</text>
+          </view>
+        </navigator>
+    </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class listitem extends wepy.component {
+    props = {
+      listData: {}
+
+    }
+    data = {
+
+    }
+    components = {
+
+    }
+    methods = {
+
+    }
+    onLoad(option) {
+
+    }
+  }
+</script>

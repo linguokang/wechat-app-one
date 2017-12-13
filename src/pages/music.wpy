@@ -89,7 +89,6 @@
 
       <text class="title">{{datas.story_title}}</text>
       <text class="author">文/{{datas.story_author.user_name}}</text>
-      <!--<view class="article" is="wxParse" data="{{wxParseData:article}}"></view>-->
       <import src="../components/wxParse/wxParse.wxml"/>
       <view class='wxParse'>
         <template is="wxParse" data="{{wxParseData:article.nodes}}"/>
@@ -124,9 +123,6 @@
     components = {
 
     }
-
-//    mixins = [testMixin]
-
     data = {
       datas: [],
     }

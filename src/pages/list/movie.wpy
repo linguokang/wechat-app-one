@@ -1,0 +1,42 @@
+<style lang="less">
+
+
+</style>
+
+<template>
+  <view>
+    找不到接口
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '../../api/api.js'
+
+  var moment = require('moment');
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '影视'
+    }
+    components = {
+
+    }
+
+    data = {
+      readList: [],
+      date:'',
+    }
+    methods = {
+
+    };
+
+    onLoad(option) {
+
+    }
+    onReachBottom(){
+
+    }
+
+  }
+</script>

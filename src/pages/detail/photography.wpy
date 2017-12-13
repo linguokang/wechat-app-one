@@ -1,0 +1,89 @@
+<style lang="less">
+    .category4{
+      padding-bottom: 30rpx;
+      .img{
+        width: 100%;
+        height: 750rpx;
+      }
+      .author{
+        display: flex;
+        justify-content: center;
+        color: #858585;
+      }
+      .forward{
+        display: flex;
+        justify-content: center;
+        margin: 30rpx auto;
+        width: 600rpx;
+        line-height: 48rpx;
+        color: #2f2f2f;
+      }
+      .words_info{
+        display: flex;
+        justify-content: center;
+        color: #858585;
+      }
+    }
+
+  page{
+    width: 100%;
+    height: 100%;
+  }
+  .swiper{
+    width: 100%;
+    height: 100%;
+    swiper-item{
+      overflow-y: scroll;
+    }
+  }
+  .date{
+    display: flex;
+    justify-content: center;
+    color: #6a6a6a;
+  }
+</style>
+<template>
+        <view class="container">
+            <!--第一个-->
+            <view class='category4'>
+              <image class="img" src="{{ volData.hp_img_url }}" mode="aspectFill"/>
+              <text class="author">{{ volData.hp_title }}|{{ volData.image_authors }}</text>
+              <text class="forward">{{ volData.hp_content }}</text>
+              <text class="words_info">{{ volData.text_authors }}</text>
+            </view>
+        </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import api from '../../api/api.js'
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '图文'
+    }
+    components = {
+
+    }
+    data = {
+      volData:[],
+
+    }
+    methods = {
+
+
+    };
+
+    onLoad(option) {
+      api.getVolDetailById({
+          query: {
+            id: option.id
+          },
+          success: (res) => {
+            this.volData = res.data.data
+            this.$apply()
+            console.log(this.volData)
+        }
+      })
+    }
+  }
+</script>

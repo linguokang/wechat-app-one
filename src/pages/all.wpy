@@ -17,12 +17,15 @@
       flex-wrap: wrap;
       justify-content: space-around;
       li{
-        position: relative;
-        display: flex;
-        justify-content: center;
-        width: 240rpx;
-        height: 240rpx;
-        margin-top: 10rpx;
+
+        navigator{
+          position: relative;
+          display: flex;
+          justify-content: center;
+          width: 240rpx;
+          height: 240rpx;
+          margin-top: 10rpx;
+        }
         .text{
           position: absolute;
           color: #fff;
@@ -52,8 +55,10 @@
     <view>
       <ul class='navigation_list'>
         <li wx:for={{navigation_list}}>
-          <text class="text">{{ item.text }}</text>
-          <image src="{{ item.img }}" mode="aspectFill"/>
+          <navigator url="{{item.link}}" hover-class="navigator-hover">
+            <text class="text">{{ item.text }}</text>
+            <image src="{{ item.img }}" mode="aspectFill"/>
+          </navigator>
         </li>
       </ul>
     </view>
@@ -69,7 +74,7 @@
   import util from '../utils/utils.js'
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: 'all'
+      navigationBarTitleText: '全部'
     }
     components = {
 
@@ -79,13 +84,12 @@
     data = {
       carousel:[],
       navigation_list:[
-        {text:'图文',img:'../assets/img/1.jpg'},
-        {text:'问答',img:'../assets/img/2.jpg'},
-        {text:'阅读',img:'../assets/img/3.jpg'},
-        {text:'连载',img:'../assets/img/4.jpg'},
-        {text:'影视',img:'../assets/img/5.jpg'},
-        {text:'音乐',img:'../assets/img/6.jpg'},
-//        {text:'电台',img:'../assets/img/7.jpg'},
+        {text:'图文',img:'../assets/img/1.jpg',link:'./list/photography'},
+        {text:'问答',img:'../assets/img/2.jpg',link:'./list/question'},
+        {text:'阅读',img:'../assets/img/3.jpg',link:'./list/reading'},
+        {text:'连载',img:'../assets/img/4.jpg',link:'./list/serialcontent'},
+        {text:'影视',img:'../assets/img/5.jpg',link:'./list/movie'},
+        {text:'音乐',img:'../assets/img/6.jpg',link:'./list/music'},
       ]
     }
     methods = {
@@ -101,7 +105,6 @@
           this.$apply()
         }
       })
-
     }
   }
 </script>

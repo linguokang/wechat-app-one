@@ -23,7 +23,14 @@ export default class extends wepy.app {
       'pages/music',
       'pages/question',
       'pages/movie',
-      'pages/serial'
+      'pages/serial',
+      'pages/list/photography',
+      'pages/detail/photography',
+      'pages/list/reading',
+      'pages/list/question',
+      'pages/list/serialcontent',
+      'pages/list/movie',
+      'pages/list/music',
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -42,11 +49,6 @@ export default class extends wepy.app {
         "text": "all",
         "iconPath": "./assets/img/all.png",
         "selectedIconPath": "./assets/img/all_active.png"
-      }, {
-        "pagePath": "pages/me",
-        "text": "me",
-        "iconPath": "./assets/img/me.png",
-        "selectedIconPath": "./assets/img/me_active.png"
       }]
     }
   }
