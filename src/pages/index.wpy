@@ -76,10 +76,14 @@
     justify-content: center;
     color: #6a6a6a;
   }
+  .next{
+    width: 750rpx;
+    height: 300rpx;
+  }
 </style>
 <template>
   <view class='date'>{{date}}</view>
-  <swiper class='swiper' bindchange="bindChange">
+  <swiper class='swiper' bindchange="bindChange" current='{{swiperCurrent}}'>
     <block wx:for="{{vols}}">
       <swiper-item>
         <view class="container">
@@ -104,6 +108,7 @@
               <text class="forward">{{ item.forward }}</text>
             </view>
           </view>
+          <image class="next" src="../assets/img/next.jpg" mode="aspectFill" bindtap='next()'/>
         </view>
       </swiper-item>
     </block>
@@ -125,10 +130,23 @@
     data = {
       VolIdList:[],
       vols: [],
-      current: 2,
+      current: 2,//一开始先加载两个内容
+      swiperCurrent:0,
       date:new Date
     }
     methods = {
+      next(){
+
+        if(this.swiperCurrent<9){
+          this.swiperCurrent++
+        }else{
+          wx.showToast({
+            title: '到底了',
+            icon: 'warn',
+            duration: 2000
+          })
+        }
+      },
       toDetail(category,id){
         var url
         switch(category)
@@ -159,9 +177,11 @@
         if(e.detail.current==this.vols.length-1){
           console.log(e.detail.current)
           this.current = e.detail.current+2
+
           this.getVols(this.VolIdList)
         }
         this.date = this.vols[e.detail.current].date
+        this.swiperCurrent = e.detail.current
         this.$apply();
       }
     };
@@ -191,6 +211,7 @@
 
     }
     onLoad() {
+      console.log(this.swiperCurrent)
       this.date = this.date.Format("yyyy/MM/dd");
       api.getVolIdList({
           success: (res) => {
