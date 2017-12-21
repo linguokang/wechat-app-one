@@ -15,12 +15,20 @@
 
 ## 演示
 
+![Alt text](https://github.com/linguokang/wechat-app-one/blob/master/gif/1.gif)
+
+![Alt text](https://github.com/linguokang/wechat-app-one/blob/master/gif/2.gif)
+
+![Alt text](https://github.com/linguokang/wechat-app-one/blob/master/gif/3.gif)
 
 ## run
 
 安装（更新） wepy 命令行工具。
+
 > npm install wepy-cli -g
+
 开发实时编译
+
 > wepy build --watch
 
 
